@@ -43,6 +43,7 @@
             margin-bottom: 15px;
             border-left: 5px solid var(--primary-color);
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
         }
         .manage-label { font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold; }
         .manage-value { font-size: 1rem; font-weight: 600; color: #333; margin-bottom: 8px; }
@@ -249,7 +250,7 @@
 
 <script>
     // -------------------------------------------------------------------
-    // --- FIREBASE CONFIG (USER PROVIDED) ---
+    // --- FIREBASE CONFIG (PASTE YOUR CONFIG HERE) ---
     // -------------------------------------------------------------------
     const firebaseConfig = {
       apiKey: "AIzaSyCDTIcr5F3D7xA0DR6TLnN3inEtcXJNSEQ",
@@ -341,7 +342,7 @@
         document.getElementById('qrResultArea').classList.remove('hidden');
     }
 
-    // --- FIREBASE: MANAGE LIST (NEW CARD DESIGN) ---
+    // --- FIREBASE: MANAGE LIST (UPDATED WITH ALERT) ---
     function loadRealtimeShipments() {
         db.collection("shipments").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
             const container = document.getElementById('shipmentListContainer');
@@ -398,7 +399,17 @@
         });
     }
 
-    function updateStatus(docId, val) { db.collection("shipments").doc(docId).update({ status: val }); }
+    // --- UPDATE STATUS WITH ALERT ---
+    function updateStatus(docId, val) { 
+        db.collection("shipments").doc(docId).update({ status: val })
+        .then(() => {
+            alert("Status Updated Successfully!"); // Confirmation Alert
+        })
+        .catch((error) => {
+            alert("Error updating status: " + error);
+        });
+    }
+
     function deleteShipment(docId) { if(confirm("Delete?")) db.collection("shipments").doc(docId).delete(); }
 
     // --- USER TRACKING ---
