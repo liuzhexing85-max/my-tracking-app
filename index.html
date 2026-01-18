@@ -21,102 +21,53 @@
             --primary-color: #0d2c56;
             --accent-color: #fca311;
             --bg-color: #f3f5f9;
-            --card-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
-        body { 
-            background-color: var(--bg-color); 
-            font-family: 'Poppins', sans-serif; 
-            color: #333;
-        }
+        body { background-color: var(--bg-color); font-family: 'Poppins', sans-serif; color: #333; }
 
         /* NAVBAR */
-        .navbar {
-            background-color: var(--primary-color) !important;
-            padding: 15px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
+        .navbar { background-color: var(--primary-color) !important; padding: 15px 0; }
         .navbar-brand { font-weight: 700; letter-spacing: 1px; font-size: 1.5rem; }
 
-        /* INPUT STYLING */
-        .track-form-container {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
-        }
-        
-        .custom-input {
-            background-color: #f8f9fa;
-            border: 2px solid #eee;
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-        .custom-input:focus {
-            background-color: #fff;
-            border-color: var(--accent-color);
-            box-shadow: none;
-        }
-
-        .btn-track {
-            background-color: var(--accent-color);
-            color: #fff;
-            font-weight: bold;
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 1.1rem;
-            border: none;
-            width: 100%;
-            transition: transform 0.2s;
-        }
-        .btn-track:active { transform: scale(0.98); }
-
-        /* RESULT AREA */
+        /* CARDS */
         .custom-card {
-            background: #fff;
-            border-radius: 16px;
-            border: none;
-            box-shadow: var(--card-shadow);
-            padding: 30px;
-            margin-bottom: 20px;
+            background: #fff; border-radius: 16px; border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); padding: 20px; margin-bottom: 20px;
         }
 
-        .tracking-header {
-            background: linear-gradient(135deg, #0d2c56 0%, #1a4b8c 100%);
-            color: white;
+        /* MANAGE LIST CARD STYLE (Mobile Friendly) */
+        .manage-card {
+            background: white;
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            text-align: center;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--primary-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .manage-label { font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold; }
+        .manage-value { font-size: 1rem; font-weight: 600; color: #333; margin-bottom: 8px; }
+
+        /* INPUTS */
+        .custom-input {
+            background-color: #f8f9fa; border: 2px solid #eee; border-radius: 12px;
+            padding: 12px; margin-bottom: 15px;
+        }
+        .btn-track {
+            background-color: var(--accent-color); color: #fff; font-weight: bold;
+            border-radius: 12px; padding: 15px; width: 100%; border: none;
         }
 
         /* TIMELINE */
-        .timeline-container { position: relative; margin: 30px 0; padding-left: 20px; }
-        .timeline-step {
-            position: relative;
-            padding-bottom: 30px;
-            padding-left: 30px;
-            border-left: 3px solid #e0e0e0;
-        }
+        .timeline-container { margin: 30px 0; padding-left: 20px; }
+        .timeline-step { position: relative; padding-bottom: 30px; padding-left: 30px; border-left: 3px solid #e0e0e0; }
         .timeline-step:last-child { border-left: transparent; }
         .timeline-step::before {
-            content: ''; position: absolute; left: -11px; top: 0;
-            width: 20px; height: 20px; border-radius: 50%;
-            background: #fff; border: 4px solid #e0e0e0; z-index: 2;
+            content: ''; position: absolute; left: -11px; top: 0; width: 20px; height: 20px;
+            border-radius: 50%; background: #fff; border: 4px solid #e0e0e0;
         }
         .timeline-step.active { border-left-color: #28a745; }
         .timeline-step.active::before { border-color: #28a745; background: #28a745; }
-        .timeline-step.current::before { border-color: var(--accent-color); background: #fff; }
-
-        .timeline-title { font-weight: 600; font-size: 1rem; margin-bottom: 2px; }
-        .timeline-date { font-size: 0.8rem; color: #888; }
-
-        .detail-label { font-size: 0.75rem; text-transform: uppercase; color: #888; letter-spacing: 0.5px; font-weight: 600; }
-        .detail-value { font-size: 1rem; font-weight: 600; color: #0d2c56; margin-bottom: 15px; }
-
+        
         .hidden { display: none !important; }
     </style>
 </head>
@@ -131,112 +82,73 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link active" onclick="showPage('home')">TRACK SHIPMENT</a></li>
-                <li class="nav-item"><a class="nav-link" onclick="showPage('adminLogin')">ADMIN PORTAL</a></li>
+                <li class="nav-item"><a class="nav-link active" onclick="showPage('home')">TRACK</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showPage('adminLogin')">ADMIN</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- Main Container -->
-<div class="container mt-5 mb-5">
+<div class="container mt-4 mb-5">
 
     <!-- 1. USER TRACKING PAGE -->
     <div id="homePage">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                
-                <div class="text-center mb-4">
-                    <h2 class="fw-bold" style="color: var(--primary-color);">Track Your Package</h2>
-                    <p class="text-muted">Enter your Tracking ID & Verify Code</p>
-                </div>
-
-                <!-- TRACKING FORM -->
-                <div class="track-form-container">
-                    <div class="mb-2">
-                        <label class="fw-bold small text-muted ms-1">TRACKING NUMBER</label>
-                        <input type="text" id="trackInput" class="form-control custom-input" placeholder="e.g. DS-123456">
-                    </div>
+                <div class="custom-card text-center">
+                    <h3 class="fw-bold mb-4" style="color: var(--primary-color);">Track Package</h3>
                     
-                    <div class="mb-3">
-                        <label class="fw-bold small text-muted ms-1">VERIFY CODE</label>
-                        <input type="text" id="verifyInput" class="form-control custom-input" placeholder="e.g. MKL34">
-                    </div>
-
+                    <input type="text" id="trackInput" class="form-control custom-input" placeholder="Tracking Number (e.g. DS-123456)">
+                    <input type="text" id="verifyInput" class="form-control custom-input" placeholder="Verify Code (e.g. MKL34)">
+                    
                     <button class="btn-track shadow-sm" onclick="trackShipment()">TRACK NOW</button>
 
-                    <!-- Error Message (ဒီနေရာမှာ စာတန်းပေါ်လာပါမယ်) -->
-                    <div id="errorMsg" class="alert alert-danger hidden mt-3 rounded-3 border-0 text-center">
-                        <i class="bi bi-exclamation-circle-fill"></i> <span id="errorText">Tracking Number or Verify Code Incorrect!</span>
+                    <div id="errorMsg" class="alert alert-danger hidden mt-3 border-0">
+                        <i class="bi bi-exclamation-circle-fill"></i> <span id="errorText">Not Found!</span>
                     </div>
-                </div>
-
-                <!-- LOADING -->
-                <div id="loadingSpinner" class="text-center hidden mt-4">
-                    <div class="spinner-border text-primary" role="status"></div>
-                    <p class="mt-2 text-muted">Searching...</p>
+                    <div id="loadingSpinner" class="hidden mt-3"><div class="spinner-border text-primary"></div></div>
                 </div>
 
                 <!-- RESULT CARD -->
-                <div id="trackingResult" class="custom-card hidden mt-4">
+                <div id="trackingResult" class="custom-card hidden">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <div class="text-muted small">Tracking Number</div>
+                            <h4 class="fw-bold text-primary" id="resTrackNo">---</h4>
+                        </div>
+                        <span id="resStatusBadge" class="badge bg-success rounded-pill px-3 py-2">---</span>
+                    </div>
                     
-                    <div class="tracking-header">
-                        <div class="text-uppercase small opacity-75">Tracking Number</div>
-                        <div class="fs-3 fw-bold" id="resTrackNo">---</div>
-                    </div>
-
-                    <div class="text-center mb-4">
-                        <span id="resStatusBadge" class="badge rounded-pill bg-success fs-6 px-4 py-2">---</span>
-                    </div>
-
-                    <div class="row g-4">
-                        <!-- Sender Side -->
-                        <div class="col-md-6 border-end">
-                            <h6 class="text-primary fw-bold mb-3"><i class="bi bi-box-arrow-up"></i> SENDER</h6>
-                            <div class="detail-label">Name</div>
-                            <div class="detail-value" id="resSender">---</div>
-                            <div class="detail-label">Location</div>
-                            <div class="detail-value" id="resSenderLoc">---</div>
-                            <div class="detail-label">Origin Country</div>
-                            <div class="detail-value" id="resFromCountry">---</div>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="manage-label">Sender</div>
+                            <div class="fw-bold" id="resSender">---</div>
+                            <div class="small text-muted" id="resFromCountry">---</div>
                         </div>
-
-                        <!-- Receiver Side -->
-                        <div class="col-md-6 ps-md-4">
-                            <h6 class="text-success fw-bold mb-3"><i class="bi bi-box-arrow-in-down"></i> RECEIVER</h6>
-                            <div class="detail-label">Client Name</div>
-                            <div class="detail-value" id="resClient">---</div>
-                            <div class="detail-label">Phone No</div>
-                            <div class="detail-value text-danger" id="resClientPhone">---</div>
-                            <div class="detail-label">Location</div>
-                            <div class="detail-value" id="resClientLoc">---</div>
-                            <div class="detail-label">Destination</div>
-                            <div class="detail-value" id="resToCountry">---</div>
+                        <div class="col-6">
+                            <div class="manage-label">Receiver</div>
+                            <div class="fw-bold" id="resClient">---</div>
+                            <div class="small text-muted" id="resToCountry">---</div>
                         </div>
                     </div>
-
-                    <hr class="my-4">
-                    <h6 class="fw-bold mb-3 text-secondary">SHIPMENT PROGRESS</h6>
+                    
+                    <hr>
+                    <h6 class="fw-bold text-secondary">History</h6>
                     <div class="timeline-container" id="timelineContainer"></div>
-
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 2. ADMIN LOGIN PAGE -->
+    <!-- 2. ADMIN LOGIN -->
     <div id="adminLoginPage" class="hidden">
         <div class="row justify-content-center">
             <div class="col-md-4">
                 <div class="custom-card text-center">
-                    <h4 class="fw-bold mb-4">Admin Portal</h4>
-                    <div class="mb-3 text-start">
-                        <input type="text" id="adminUser" class="form-control custom-input" placeholder="Username">
-                    </div>
-                    <div class="mb-4 text-start">
-                        <input type="password" id="adminPass" class="form-control custom-input" placeholder="Password">
-                    </div>
-                    <button class="btn btn-primary w-100 btn-lg rounded-pill" onclick="login()">SECURE LOGIN</button>
+                    <h4 class="fw-bold mb-4">Admin Login</h4>
+                    <input type="text" id="adminUser" class="form-control custom-input" placeholder="Username">
+                    <input type="password" id="adminPass" class="form-control custom-input" placeholder="Password">
+                    <button class="btn btn-primary w-100 rounded-pill py-2" onclick="login()">LOGIN</button>
                 </div>
             </div>
         </div>
@@ -244,125 +156,62 @@
 
     <!-- 3. ADMIN DASHBOARD -->
     <div id="adminDashboard" class="hidden">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fw-bold" style="color: var(--primary-color);">Dashboard</h3>
-            <button class="btn btn-outline-danger rounded-pill px-4" onclick="logout()">Logout</button>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-bold text-primary">Dashboard</h4>
+            <button class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="logout()">Logout</button>
         </div>
 
-        <div class="custom-card p-0 overflow-hidden">
-            <div class="card-header bg-white border-bottom p-0">
-                <ul class="nav nav-pills nav-fill p-3" id="myTab" role="tablist">
-                    <li class="nav-item">
-                        <button class="nav-link active fw-bold" id="create-tab" data-bs-toggle="tab" data-bs-target="#create">CREATE SHIPMENT</button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="nav-link fw-bold" id="manage-tab" data-bs-toggle="tab" data-bs-target="#manage">MANAGE LIST</button>
-                    </li>
-                </ul>
+        <!-- TABS -->
+        <ul class="nav nav-pills nav-fill mb-3 bg-white p-2 rounded shadow-sm">
+            <li class="nav-item"><button class="nav-link active fw-bold" id="create-tab" data-bs-toggle="tab" data-bs-target="#create">Create</button></li>
+            <li class="nav-item"><button class="nav-link fw-bold" id="manage-tab" data-bs-toggle="tab" data-bs-target="#manage">Manage List</button></li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- CREATE TAB -->
+            <div class="tab-pane fade show active" id="create">
+                <div class="custom-card">
+                    <h6 class="text-primary fw-bold mb-3">SENDER</h6>
+                    <input type="text" id="senderName" class="form-control custom-input" placeholder="Sender Name">
+                    <input type="text" id="senderLoc" class="form-control custom-input" placeholder="Sender Location">
+                    <select id="sendFromCountry" class="form-select custom-input">
+                        <option value="" disabled selected>Select Origin</option>
+                        <option value="Malaysia">Malaysia</option>
+                        <option value="Singapore">Singapore</option>
+                        <option value="Thailand">Thailand</option>
+                    </select>
+
+                    <h6 class="text-success fw-bold mb-3 mt-4">CLIENT</h6>
+                    <input type="text" id="clientName" class="form-control custom-input" placeholder="Client Name">
+                    <input type="text" id="clientPhone" class="form-control custom-input" placeholder="Phone Number">
+                    <input type="text" id="clientLoc" class="form-control custom-input" placeholder="Client Location">
+                    <select id="sendToCountry" class="form-select custom-input">
+                        <option value="" disabled selected>Select Destination</option>
+                        <optgroup label="Popular">
+                            <option value="Myanmar">Myanmar</option>
+                            <option value="Thailand">Thailand</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="Vietnam">Vietnam</option>
+                        </optgroup>
+                        <optgroup label="Others">
+                            <option value="USA">USA</option>
+                            <option value="Japan">Japan</option>
+                            <option value="Korea">Korea</option>
+                            <option value="Australia">Australia</option>
+                            <option value="Austria">Austria</option>
+                            <option value="UK">UK</option>
+                        </optgroup>
+                    </select>
+
+                    <button class="btn btn-primary w-100 btn-lg rounded-pill mt-3" onclick="createShipmentFirestore()">GENERATE & SAVE</button>
+                </div>
             </div>
 
-            <div class="card-body p-4">
-                <div class="tab-content">
-                    
-                    <!-- CREATE TAB -->
-                    <div class="tab-pane fade show active" id="create">
-                        <div class="row g-4">
-                            <!-- SENDER DETAILS -->
-                            <div class="col-md-6">
-                                <div class="p-4 bg-light rounded-3 h-100">
-                                    <h6 class="text-primary fw-bold mb-3">SENDER DETAILS</h6>
-                                    <div class="mb-3"><input type="text" id="senderName" class="form-control" placeholder="Sender Name"></div>
-                                    <div class="mb-3"><input type="text" id="senderLoc" class="form-control" placeholder="City/Location"></div>
-                                    <div class="mb-3">
-                                        <select id="sendFromCountry" class="form-select">
-                                            <option value="" disabled selected>Select Origin</option>
-                                            <option value="Malaysia">Malaysia</option>
-                                            <option value="Singapore">Singapore</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- CLIENT DETAILS -->
-                            <div class="col-md-6">
-                                <div class="p-4 bg-light rounded-3 h-100">
-                                    <h6 class="text-success fw-bold mb-3">CLIENT DETAILS</h6>
-                                    <div class="mb-3"><input type="text" id="clientName" class="form-control" placeholder="Client Name"></div>
-                                    <div class="mb-3"><input type="text" id="clientPhone" class="form-control" placeholder="Phone Number"></div>
-                                    <div class="mb-3"><input type="text" id="clientLoc" class="form-control" placeholder="City/Location"></div>
-                                    <div class="mb-3">
-                                        <label class="small text-muted mb-1">Destination Country</label>
-                                        <select id="sendToCountry" class="form-select" style="height: 50px;">
-                                            <option value="" disabled selected>Select Destination</option>
-                                            
-                                            <optgroup label="Popular">
-                                                <option value="Vietnam">Vietnam</option>
-                                                <option value="Thailand">Thailand</option>
-                                                <option value="Myanmar">Myanmar</option>
-                                                <option value="Singapore">Singapore</option>
-                                            </optgroup>
-
-                                            <optgroup label="Asia / Oceania">
-                                                <option value="Australia">Australia</option>
-                                                <option value="Malaysia">Malaysia</option>
-                                                <option value="Indonesia">Indonesia</option>
-                                                <option value="Philippines">Philippines</option>
-                                                <option value="Cambodia">Cambodia</option>
-                                                <option value="Laos">Laos</option>
-                                                <option value="China">China</option>
-                                                <option value="Japan">Japan</option>
-                                                <option value="South Korea">South Korea</option>
-                                                <option value="Taiwan">Taiwan</option>
-                                                <option value="Hong Kong">Hong Kong</option>
-                                                <option value="India">India</option>
-                                            </optgroup>
-                                            
-                                            <optgroup label="Europe">
-                                                <option value="Austria">Austria</option>
-                                                <option value="UK">UK</option>
-                                                <option value="Germany">Germany</option>
-                                                <option value="France">France</option>
-                                                <option value="Italy">Italy</option>
-                                                <option value="Spain">Spain</option>
-                                                <option value="Netherlands">Netherlands</option>
-                                                <option value="Switzerland">Switzerland</option>
-                                            </optgroup>
-
-                                            <optgroup label="Americas">
-                                                <option value="USA">USA</option>
-                                                <option value="Canada">Canada</option>
-                                            </optgroup>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="text-center mt-4">
-                            <button class="btn btn-primary btn-lg px-5 rounded-pill shadow" onclick="createShipmentFirestore()">
-                                GENERATE TRACKING & SAVE
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- MANAGE TAB -->
-                    <div class="tab-pane fade" id="manage">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>ID / Code</th>
-                                        <th>Client</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="shipmentTableBody">
-                                    <tr><td colspan="4" class="text-center py-4">Loading data...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            <!-- MANAGE TAB (UPDATED DESIGN) -->
+            <div class="tab-pane fade" id="manage">
+                <div id="shipmentListContainer">
+                    <!-- JS will load cards here -->
+                    <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
                 </div>
             </div>
         </div>
@@ -376,23 +225,18 @@
         <div class="modal-content border-0 p-3">
             <div class="modal-header border-0 pb-0"><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
             <div class="modal-body text-center">
-                <div class="display-1 text-success mb-3"><i class="bi bi-check-circle-fill"></i></div>
-                <h4 class="fw-bold">Shipment Created!</h4>
-                <div class="bg-light p-3 rounded mt-3 mb-3">
-                    <div class="small text-muted">Tracking Number</div>
+                <h4 class="fw-bold text-success">Success!</h4>
+                <div class="bg-light p-3 rounded mt-2 mb-3">
+                    <div class="small text-muted">Tracking No</div>
                     <div class="fs-4 fw-bold text-primary" id="modalTrackNo">---</div>
                     <hr>
                     <div class="small text-muted">Verify Code</div>
                     <div class="fs-3 fw-bold text-danger font-monospace" id="modalVerifyCode">---</div>
                 </div>
-                <p>Do you want to generate a QR Code?</p>
                 <div id="qrResultArea" class="hidden mt-3">
-                    <img id="generatedQrImg" src="" class="img-fluid border p-2 rounded shadow-sm" style="width: 180px;">
+                    <img id="generatedQrImg" src="" class="img-fluid border p-2 rounded" style="width: 180px;">
                 </div>
-                <div id="modalButtons" class="mt-4">
-                    <button class="btn btn-light px-4" data-bs-dismiss="modal">Close</button>
-                    <button class="btn btn-primary px-4" onclick="showQrInModal()">Generate QR</button>
-                </div>
+                <button class="btn btn-primary mt-3 px-4" onclick="showQrInModal()">Show QR</button>
             </div>
         </div>
     </div>
@@ -405,7 +249,7 @@
 
 <script>
     // -------------------------------------------------------------------
-    // --- FIREBASE CONFIG ---
+    // --- FIREBASE CONFIG (USER PROVIDED) ---
     // -------------------------------------------------------------------
     const firebaseConfig = {
       apiKey: "AIzaSyCDTIcr5F3D7xA0DR6TLnN3inEtcXJNSEQ",
@@ -445,29 +289,24 @@
     function login() {
         const u = document.getElementById('adminUser').value;
         const p = document.getElementById('adminPass').value;
-        // lacus / lacus0000 (Case Sensitive)
         if(u === "lacus" && btoa(p) === "bGFjdXMwMDAw") {
             showPage('dashboard');
             document.getElementById('adminUser').value = '';
             document.getElementById('adminPass').value = '';
         } else {
-            // UPDATED: No alert(), use custom error logic if needed, or simple alert for admin
-            alert("Access Denied (Check username/password case)");
+            alert("Access Denied");
         }
     }
     function logout() { showPage('home'); }
 
-    // --- CODE GENERATOR ---
     function generateVerifyCode() {
         const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; 
         let result = "";
-        for (let i = 0; i < 5; i++) {
-            result += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
+        for (let i = 0; i < 5; i++) { result += chars.charAt(Math.floor(Math.random() * chars.length)); }
         return result;
     }
 
-    // --- FIREBASE: CREATE SHIPMENT ---
+    // --- FIREBASE: CREATE ---
     function createShipmentFirestore() {
         const sName = document.getElementById('senderName').value;
         const sLoc = document.getElementById('senderLoc').value;
@@ -477,51 +316,38 @@
         const cLoc = document.getElementById('clientLoc').value;
         const cCountry = document.getElementById('sendToCountry').value;
 
-        if(!sName || !cName || !cPhone) { alert("Please fill in required fields."); return; }
+        if(!sName || !cName) { alert("Please fill details."); return; }
 
         const trackNo = "DS-" + Math.floor(100000 + Math.random() * 900000);
-        const verifyCode = generateVerifyCode(); // e.g. MKL34
+        const verifyCode = generateVerifyCode();
         latestTrackNo = trackNo;
 
         db.collection("shipments").add({
-            track_id: trackNo,
-            verify_code: verifyCode,
-            sender: sName,
-            senderLoc: sLoc,
-            fromCountry: sCountry,
-            client: cName,
-            clientPhone: cPhone,
-            clientLoc: cLoc,
-            toCountry: cCountry,
-            status: "Arrived at custom",
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
+            track_id: trackNo, verify_code: verifyCode,
+            sender: sName, senderLoc: sLoc, fromCountry: sCountry,
+            client: cName, clientPhone: cPhone, clientLoc: cLoc, toCountry: cCountry,
+            status: "Arrived at custom", createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
             document.querySelectorAll('#create input').forEach(input => input.value = '');
-            
             document.getElementById('modalTrackNo').innerText = trackNo;
             document.getElementById('modalVerifyCode').innerText = verifyCode;
             document.getElementById('qrResultArea').classList.add('hidden');
-            document.getElementById('modalButtons').classList.remove('hidden');
             new bootstrap.Modal(document.getElementById('qrModal')).show();
-        })
-        .catch(err => alert("Error: " + err.message));
+        }).catch(err => alert("Error: " + err.message));
     }
 
     function showQrInModal() {
-        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${latestTrackNo}`;
-        document.getElementById('generatedQrImg').src = qrUrl;
+        document.getElementById('generatedQrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${latestTrackNo}`;
         document.getElementById('qrResultArea').classList.remove('hidden');
-        document.getElementById('modalButtons').classList.add('hidden');
     }
 
-    // --- FIREBASE: MANAGE TABLE ---
+    // --- FIREBASE: MANAGE LIST (NEW CARD DESIGN) ---
     function loadRealtimeShipments() {
         db.collection("shipments").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
-            const tbody = document.getElementById('shipmentTableBody');
-            tbody.innerHTML = '';
+            const container = document.getElementById('shipmentListContainer');
+            container.innerHTML = '';
             
-            if(snapshot.empty) { tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No records.</td></tr>'; return; }
+            if(snapshot.empty) { container.innerHTML = '<div class="text-center text-muted py-5">No shipments found.</div>'; return; }
 
             snapshot.forEach((doc) => {
                 const item = doc.data();
@@ -532,22 +358,42 @@
                     statusOptions += `<option value="${step}" ${selected}>${step}</option>`;
                 });
 
-                const row = `
-                    <tr>
-                        <td>
-                            <div class="fw-bold text-primary">${item.track_id}</div>
-                            <small class="text-danger font-monospace bg-light px-1 border rounded">${item.verify_code}</small>
-                        </td>
-                        <td>${item.client}<br><small class="text-muted">${item.clientPhone}</small></td>
-                        <td>
-                            <select onchange="updateStatus('${doc.id}', this.value)" class="form-select form-select-sm border-0 bg-light fw-bold" style="width:140px;">
+                // CARD LAYOUT FOR MOBILE
+                const card = `
+                    <div class="manage-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="manage-label">Tracking ID</div>
+                                <div class="manage-value text-primary">${item.track_id}</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="manage-label">Verify Code</div>
+                                <div class="badge bg-light text-danger border">${item.verify_code}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <div class="manage-label">Client</div>
+                                <div class="manage-value">${item.client} <span class="text-muted fw-normal">(${item.clientPhone})</span></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-2">
+                            <div class="manage-label">Update Status</div>
+                            <select onchange="updateStatus('${doc.id}', this.value)" class="form-select mt-1 bg-light fw-bold border-secondary">
                                 ${statusOptions}
                             </select>
-                        </td>
-                        <td><button class="btn btn-sm btn-light text-danger" onclick="deleteShipment('${doc.id}')"><i class="bi bi-trash"></i></button></td>
-                    </tr>
+                        </div>
+
+                        <div class="mt-3 text-end border-top pt-2">
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteShipment('${doc.id}')">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
                 `;
-                tbody.innerHTML += row;
+                container.innerHTML += card;
             });
         });
     }
@@ -555,89 +401,54 @@
     function updateStatus(docId, val) { db.collection("shipments").doc(docId).update({ status: val }); }
     function deleteShipment(docId) { if(confirm("Delete?")) db.collection("shipments").doc(docId).delete(); }
 
-    // --- USER TRACKING (UPDATED: NO ALERT BOX) ---
+    // --- USER TRACKING ---
     function trackShipment() {
         const inputId = document.getElementById('trackInput').value.trim();
         const inputCode = document.getElementById('verifyInput').value.trim();
-        
         const resDiv = document.getElementById('trackingResult');
         const errDiv = document.getElementById('errorMsg');
-        const errText = document.getElementById('errorText'); // New span for text
+        const errText = document.getElementById('errorText');
         const load = document.getElementById('loadingSpinner');
 
-        // Reset
-        resDiv.classList.add('hidden');
-        errDiv.classList.add('hidden');
+        resDiv.classList.add('hidden'); errDiv.classList.add('hidden');
 
-        // Validation without ALERT
         if(!inputId || !inputCode) {
-            errText.innerText = "Please enter both Tracking Number and Verify Code";
-            errDiv.classList.remove('hidden');
-            return;
+            errText.innerText = "Enter Tracking Number & Code"; errDiv.classList.remove('hidden'); return;
         }
         
         load.classList.remove('hidden');
 
-        db.collection("shipments").where("track_id", "==", inputId).get()
-        .then((snapshot) => {
+        db.collection("shipments").where("track_id", "==", inputId).get().then((snapshot) => {
             load.classList.add('hidden');
-            
-            if(snapshot.empty) {
-                errText.innerText = "Tracking Number not found!";
-                errDiv.classList.remove('hidden');
-                return;
-            }
+            if(snapshot.empty) { errText.innerText = "Tracking Number not found!"; errDiv.classList.remove('hidden'); return; }
 
             const data = snapshot.docs[0].data();
-            
-            // Check Verify Code (Case Insensitive)
             if (data.verify_code.toUpperCase() === inputCode.toUpperCase()) {
                 resDiv.classList.remove('hidden');
-
                 document.getElementById('resTrackNo').innerText = data.track_id;
                 document.getElementById('resStatusBadge').innerText = data.status;
-                
                 document.getElementById('resSender').innerText = data.sender;
-                document.getElementById('resSenderLoc').innerText = data.senderLoc;
                 document.getElementById('resFromCountry').innerText = data.fromCountry;
-                
                 document.getElementById('resClient').innerText = data.client;
-                document.getElementById('resClientPhone').innerText = data.clientPhone || "N/A";
-                document.getElementById('resClientLoc').innerText = data.clientLoc;
                 document.getElementById('resToCountry').innerText = data.toCountry;
-
                 renderTimeline(data.status);
             } else {
-                errText.innerText = "Incorrect Verify Code!";
-                errDiv.classList.remove('hidden');
+                errText.innerText = "Incorrect Verify Code!"; errDiv.classList.remove('hidden');
             }
-        })
-        .catch(err => {
-            load.classList.add('hidden');
-            console.error(err);
-            errText.innerText = "Connection Error. Please try again.";
-            errDiv.classList.remove('hidden');
+        }).catch(err => {
+            load.classList.add('hidden'); errText.innerText = "Connection Error"; errDiv.classList.remove('hidden');
         });
     }
 
-    // --- TIMELINE ---
     function renderTimeline(currentStatus) {
         const container = document.getElementById('timelineContainer');
         container.innerHTML = '';
         let isActive = true;
-        
         STATUS_STEPS.forEach(step => {
             let cssClass = "timeline-step";
             if(isActive) cssClass += " active";
-            if(step === currentStatus) {
-                cssClass += " current";
-                isActive = false;
-            }
-            container.innerHTML += `
-                <div class="${cssClass}">
-                    <div class="timeline-title">${step}</div>
-                    <div class="timeline-date">${isActive ? 'Completed' : 'Pending'}</div>
-                </div>`;
+            if(step === currentStatus) { cssClass += " current"; isActive = false; }
+            container.innerHTML += `<div class="${cssClass}"><div class="timeline-title">${step}</div></div>`;
         });
     }
 </script>
