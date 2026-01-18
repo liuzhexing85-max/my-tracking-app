@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Global Logistics - Professional Tracking</title>
     
-    <!-- APP ICON (ဒီနေရာမှာ ကားပုံလေး ထည့်ပေးထားပါတယ်) -->
+    <!-- APP ICON -->
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/411/411763.png">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/411/411763.png">
 
@@ -165,9 +165,9 @@
 
                     <button class="btn-track shadow-sm" onclick="trackShipment()">TRACK NOW</button>
 
-                    <!-- Error Message -->
+                    <!-- Error Message (ဒီနေရာမှာ စာတန်းပေါ်လာပါမယ်) -->
                     <div id="errorMsg" class="alert alert-danger hidden mt-3 rounded-3 border-0 text-center">
-                        <i class="bi bi-exclamation-circle-fill"></i> Tracking Number or Verify Code Incorrect!
+                        <i class="bi bi-exclamation-circle-fill"></i> <span id="errorText">Tracking Number or Verify Code Incorrect!</span>
                     </div>
                 </div>
 
@@ -451,6 +451,7 @@
             document.getElementById('adminUser').value = '';
             document.getElementById('adminPass').value = '';
         } else {
+            // UPDATED: No alert(), use custom error logic if needed, or simple alert for admin
             alert("Access Denied (Check username/password case)");
         }
     }
@@ -554,22 +555,27 @@
     function updateStatus(docId, val) { db.collection("shipments").doc(docId).update({ status: val }); }
     function deleteShipment(docId) { if(confirm("Delete?")) db.collection("shipments").doc(docId).delete(); }
 
-    // --- USER TRACKING ---
+    // --- USER TRACKING (UPDATED: NO ALERT BOX) ---
     function trackShipment() {
         const inputId = document.getElementById('trackInput').value.trim();
         const inputCode = document.getElementById('verifyInput').value.trim();
         
         const resDiv = document.getElementById('trackingResult');
         const errDiv = document.getElementById('errorMsg');
+        const errText = document.getElementById('errorText'); // New span for text
         const load = document.getElementById('loadingSpinner');
 
+        // Reset
+        resDiv.classList.add('hidden');
+        errDiv.classList.add('hidden');
+
+        // Validation without ALERT
         if(!inputId || !inputCode) {
-            alert("Please enter both Tracking Number and Verify Code");
+            errText.innerText = "Please enter both Tracking Number and Verify Code";
+            errDiv.classList.remove('hidden');
             return;
         }
         
-        resDiv.classList.add('hidden');
-        errDiv.classList.add('hidden');
         load.classList.remove('hidden');
 
         db.collection("shipments").where("track_id", "==", inputId).get()
@@ -577,6 +583,7 @@
             load.classList.add('hidden');
             
             if(snapshot.empty) {
+                errText.innerText = "Tracking Number not found!";
                 errDiv.classList.remove('hidden');
                 return;
             }
@@ -601,12 +608,14 @@
 
                 renderTimeline(data.status);
             } else {
+                errText.innerText = "Incorrect Verify Code!";
                 errDiv.classList.remove('hidden');
             }
         })
         .catch(err => {
             load.classList.add('hidden');
             console.error(err);
+            errText.innerText = "Connection Error. Please try again.";
             errDiv.classList.remove('hidden');
         });
     }
