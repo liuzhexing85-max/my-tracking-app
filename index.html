@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Global Logistics - Professional Tracking</title>
+    
+    <!-- APP ICON (ဒီနေရာမှာ ကားပုံလေး ထည့်ပေးထားပါတယ်) -->
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/411/411763.png">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/411/411763.png">
+
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -400,7 +405,7 @@
 
 <script>
     // -------------------------------------------------------------------
-    // --- FIREBASE CONFIG (Already set from previous) ---
+    // --- FIREBASE CONFIG ---
     // -------------------------------------------------------------------
     const firebaseConfig = {
       apiKey: "AIzaSyCDTIcr5F3D7xA0DR6TLnN3inEtcXJNSEQ",
@@ -469,4 +474,164 @@
         const cName = document.getElementById('clientName').value;
         const cPhone = document.getElementById('clientPhone').value;
         const cLoc = document.getElementById('clientLoc').value;
-        con
+        const cCountry = document.getElementById('sendToCountry').value;
+
+        if(!sName || !cName || !cPhone) { alert("Please fill in required fields."); return; }
+
+        const trackNo = "DS-" + Math.floor(100000 + Math.random() * 900000);
+        const verifyCode = generateVerifyCode(); // e.g. MKL34
+        latestTrackNo = trackNo;
+
+        db.collection("shipments").add({
+            track_id: trackNo,
+            verify_code: verifyCode,
+            sender: sName,
+            senderLoc: sLoc,
+            fromCountry: sCountry,
+            client: cName,
+            clientPhone: cPhone,
+            clientLoc: cLoc,
+            toCountry: cCountry,
+            status: "Arrived at custom",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+            document.querySelectorAll('#create input').forEach(input => input.value = '');
+            
+            document.getElementById('modalTrackNo').innerText = trackNo;
+            document.getElementById('modalVerifyCode').innerText = verifyCode;
+            document.getElementById('qrResultArea').classList.add('hidden');
+            document.getElementById('modalButtons').classList.remove('hidden');
+            new bootstrap.Modal(document.getElementById('qrModal')).show();
+        })
+        .catch(err => alert("Error: " + err.message));
+    }
+
+    function showQrInModal() {
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${latestTrackNo}`;
+        document.getElementById('generatedQrImg').src = qrUrl;
+        document.getElementById('qrResultArea').classList.remove('hidden');
+        document.getElementById('modalButtons').classList.add('hidden');
+    }
+
+    // --- FIREBASE: MANAGE TABLE ---
+    function loadRealtimeShipments() {
+        db.collection("shipments").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+            const tbody = document.getElementById('shipmentTableBody');
+            tbody.innerHTML = '';
+            
+            if(snapshot.empty) { tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No records.</td></tr>'; return; }
+
+            snapshot.forEach((doc) => {
+                const item = doc.data();
+                
+                let statusOptions = '';
+                STATUS_STEPS.forEach(step => {
+                    const selected = item.status === step ? 'selected' : '';
+                    statusOptions += `<option value="${step}" ${selected}>${step}</option>`;
+                });
+
+                const row = `
+                    <tr>
+                        <td>
+                            <div class="fw-bold text-primary">${item.track_id}</div>
+                            <small class="text-danger font-monospace bg-light px-1 border rounded">${item.verify_code}</small>
+                        </td>
+                        <td>${item.client}<br><small class="text-muted">${item.clientPhone}</small></td>
+                        <td>
+                            <select onchange="updateStatus('${doc.id}', this.value)" class="form-select form-select-sm border-0 bg-light fw-bold" style="width:140px;">
+                                ${statusOptions}
+                            </select>
+                        </td>
+                        <td><button class="btn btn-sm btn-light text-danger" onclick="deleteShipment('${doc.id}')"><i class="bi bi-trash"></i></button></td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        });
+    }
+
+    function updateStatus(docId, val) { db.collection("shipments").doc(docId).update({ status: val }); }
+    function deleteShipment(docId) { if(confirm("Delete?")) db.collection("shipments").doc(docId).delete(); }
+
+    // --- USER TRACKING ---
+    function trackShipment() {
+        const inputId = document.getElementById('trackInput').value.trim();
+        const inputCode = document.getElementById('verifyInput').value.trim();
+        
+        const resDiv = document.getElementById('trackingResult');
+        const errDiv = document.getElementById('errorMsg');
+        const load = document.getElementById('loadingSpinner');
+
+        if(!inputId || !inputCode) {
+            alert("Please enter both Tracking Number and Verify Code");
+            return;
+        }
+        
+        resDiv.classList.add('hidden');
+        errDiv.classList.add('hidden');
+        load.classList.remove('hidden');
+
+        db.collection("shipments").where("track_id", "==", inputId).get()
+        .then((snapshot) => {
+            load.classList.add('hidden');
+            
+            if(snapshot.empty) {
+                errDiv.classList.remove('hidden');
+                return;
+            }
+
+            const data = snapshot.docs[0].data();
+            
+            // Check Verify Code (Case Insensitive)
+            if (data.verify_code.toUpperCase() === inputCode.toUpperCase()) {
+                resDiv.classList.remove('hidden');
+
+                document.getElementById('resTrackNo').innerText = data.track_id;
+                document.getElementById('resStatusBadge').innerText = data.status;
+                
+                document.getElementById('resSender').innerText = data.sender;
+                document.getElementById('resSenderLoc').innerText = data.senderLoc;
+                document.getElementById('resFromCountry').innerText = data.fromCountry;
+                
+                document.getElementById('resClient').innerText = data.client;
+                document.getElementById('resClientPhone').innerText = data.clientPhone || "N/A";
+                document.getElementById('resClientLoc').innerText = data.clientLoc;
+                document.getElementById('resToCountry').innerText = data.toCountry;
+
+                renderTimeline(data.status);
+            } else {
+                errDiv.classList.remove('hidden');
+            }
+        })
+        .catch(err => {
+            load.classList.add('hidden');
+            console.error(err);
+            errDiv.classList.remove('hidden');
+        });
+    }
+
+    // --- TIMELINE ---
+    function renderTimeline(currentStatus) {
+        const container = document.getElementById('timelineContainer');
+        container.innerHTML = '';
+        let isActive = true;
+        
+        STATUS_STEPS.forEach(step => {
+            let cssClass = "timeline-step";
+            if(isActive) cssClass += " active";
+            if(step === currentStatus) {
+                cssClass += " current";
+                isActive = false;
+            }
+            container.innerHTML += `
+                <div class="${cssClass}">
+                    <div class="timeline-title">${step}</div>
+                    <div class="timeline-date">${isActive ? 'Completed' : 'Pending'}</div>
+                </div>`;
+        });
+    }
+</script>
+
+</body>
+</html>
